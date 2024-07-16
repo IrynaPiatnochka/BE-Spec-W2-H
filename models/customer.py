@@ -13,7 +13,7 @@ class Customer(Base):
     username: Mapped[str] = mapped_column(db.String(250), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(db.String(250), nullable=False)
     
-    orders: Mapped[List["Order"]] = db.relationship(back_populates="customers")
+    orders: Mapped[List["Order"]] = db.relationship(back_populates="customer")
     
     
     

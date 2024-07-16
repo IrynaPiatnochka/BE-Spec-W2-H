@@ -1,6 +1,9 @@
 from database import db
 from models.order import Order
 from sqlalchemy import select
+from datetime import date
+from models.product import Product
+from models.customer import Customer
 
 def save(order_data):
     
@@ -16,3 +19,8 @@ def find_all():
     query = select(Order)
     all_orders = db.session.execute(query).scalars().all()
     return all_orders
+
+def find_all_paginate(page, per_page):
+    query = select(Order)
+    orders = db.paginate(query, page=page, per_page=per_page)
+    return orders

@@ -13,7 +13,7 @@ class Order(Base):
     customer_id: Mapped[int] = mapped_column(db.ForeignKey("customers.id"))
     
     customer: Mapped["Customer"] = db.relationship(back_populates="orders")
-    products: Mapped[List["Product"]] = db.relationship(secondary=order_product, back_populates="orders")
+    products: Mapped[List["Product"]] = db.relationship(secondary=order_product)
 
 
     

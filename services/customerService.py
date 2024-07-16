@@ -16,3 +16,8 @@ def find_all():
     query = select(Customer)
     all_customers = db.session.execute(query).scalars().all()
     return all_customers
+
+def find_all_paginate(page, per_page):
+    query = select(Customer)
+    customers = db.paginate(query, page=page, per_page=per_page)
+    return customers
