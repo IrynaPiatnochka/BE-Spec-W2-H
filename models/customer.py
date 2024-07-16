@@ -1,6 +1,8 @@
 from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
+from datetime import date
+
 
 class Customer(Base):
     __tablename__ = 'customers'
@@ -12,7 +14,12 @@ class Customer(Base):
     password: Mapped[str] = mapped_column(db.String(250), nullable=False)
     
     orders: Mapped[List["Order"]] = db.relationship(back_populates="customers")
-            
+    
+    
+    
+   
+
+
     
     
     

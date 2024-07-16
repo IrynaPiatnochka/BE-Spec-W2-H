@@ -11,6 +11,9 @@ from routes.productBP import product_blueprint
 from models.order import Order
 from routes.orderBP import order_blueprint
 
+from models.order_product import order_product
+
+
 
 from limiter import limiter
 from caching import cache
