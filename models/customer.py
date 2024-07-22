@@ -1,7 +1,6 @@
 from database import db, Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from typing import List
-from datetime import date
 
 
 class Customer(Base):
@@ -12,9 +11,12 @@ class Customer(Base):
     phone: Mapped[str] = mapped_column(db.String(16), nullable=False)
     username: Mapped[str] = mapped_column(db.String(250), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(db.String(250), nullable=False)
+    role_id: Mapped[int] = mapped_column(db.Integer, nullable=False, default=2)
     
     orders: Mapped[List["Order"]] = db.relationship(back_populates="customer")
     
+    # role_id: Mapped[int] = mapped_column(db.ForeignKey('Roles.id'))
+    # role: Mapped['Role'] = db.relationship()
     
     
    

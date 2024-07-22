@@ -13,6 +13,8 @@ from routes.orderBP import order_blueprint
 
 from models.order_product import order_product
 
+from models.cart import Cart
+from routes.cartBP import cart_blueprint
 
 
 from limiter import limiter
@@ -35,6 +37,7 @@ def blueprint_config(app):
     app.register_blueprint(customer_blueprint, url_prefix='/customers')
     app.register_blueprint(product_blueprint, url_prefix='/products')
     app.register_blueprint(order_blueprint, url_prefix='/orders')
+    app.register_blueprint(cart_blueprint, url_prefix='/cart')
     
 def rate_limit_config():
     limiter.limit("200 per day")(customer_blueprint)

@@ -8,18 +8,20 @@ class CustomerSchema(ma.Schema):
     phone = fields.String(required=False)
     username = fields.String(required=False)
     password = fields.String(required=False)
+    role_id = fields.Integer(required=True)
+    
     
     class Meta:
-        fields = ("id", "name", "email", "phone", "username", "password")
+        fields = ("id", "name", "email", "phone", "username", "password", "role_id")
         
         
 customer_schema = CustomerSchema()
 customers_schema = CustomerSchema(many=True, exclude=["password"])
 
 
-class CustomerOrderSchema(ma.Schema):
-    name = fields.String(required=True)
-    email = fields.Email(required=True)
+# class CustomerOrderSchema(ma.Schema):
+#     name = fields.String(required=True)
+#     email = fields.Email(required=True)
 
 class CustomerOrderSchema(ma.Schema):
     id = fields.Integer(required=False) 

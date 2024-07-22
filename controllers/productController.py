@@ -6,16 +6,18 @@ from caching import cache
 
 
 def save():
-    
     try:
-        
         product_data = product_schema.load(request.json)
-        
     except ValidationError as e:
         return jsonify(e.messages), 400
     
     product_saved = productService.save(product_data)
     return product_schema.jsonify(product_data), 201
+
+def search_product():
+     search_term = request.args.get("search")
+     searched_items = productService.search_product(search_term)
+     return products_schema.jsonify(searched_items)
 
 @cache.cached(timeout=60)
 def find_all():

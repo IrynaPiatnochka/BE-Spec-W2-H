@@ -1,5 +1,5 @@
 from . import ma
-from marshmallow import fields
+from marshmallow import fields, validate
 
 class ProductSchema(ma.Schema):
     id = fields.Integer(required=False)
