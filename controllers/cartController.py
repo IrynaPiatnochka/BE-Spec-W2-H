@@ -22,39 +22,27 @@ def add_to_cart():
     
     cart_saved = cartService.add_to_cart(cart_data)
     return cart_schema.jsonify(cart_data), 201
-    
-    
-    try:
-        cart_data = cart_schema.load(request.json)
-    except ValidationError as e:
-        return jsonify(e.messages), 400
-
-    customer_id = cart_data.get('customer_id')
-    product_id = cart_data.get('product_id')
-    quantity = cart_data.get('quantity', 1)  
-
-    product = Product.db.session.query.get(product_id)
-    if not product:
-        return jsonify({'error': 'Product not found'}), 404
-
-    cart_entry = cartService.add_to_cart(cart_data)
-
-    return cart_schema.jsonify(cart_entry), 201  
+     
 
 def remove_from_cart():
     data = request.get_json()
+    customer_id = data.get('customer_id')
     product_id = data.get('product_id')
 
-    if not product_id:
-        return jsonify({'error': 'Product ID is required'}), 400
+    if not customer_id and not product_id:
+        return jsonify({'error': 'Customer ID and Product ID are required'}), 400
 
-    result = remove_from_cart(product_id)
+    result = remove_from_cart( product_id)
     return jsonify(result)
 
 
-def empty_cart(customer_id):
+def empty_cart(id):
     try:
-        result = empty_cart(customer_id)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        success = cartService.empty_cart(id)
+        if success:
+            return jsonify({"message": "Cart emptied successfully"}), 200
+        else:
+            return jsonify({"message": "Cart not found"}), 404
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+    

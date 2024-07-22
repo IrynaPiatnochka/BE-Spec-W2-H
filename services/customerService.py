@@ -1,6 +1,5 @@
 from database import db
 from models.customer import Customer
-from models.schemas import customerSchema
 from sqlalchemy import select, delete
 from utils.util import encode_token
 
