@@ -14,16 +14,6 @@ def view_cart(customer_id):
     return cart_schema.jsonify(cart)
 
 
-def add_to_cart():
-    try:
-        cart_data = cart_schema.load(request.json)
-    except ValidationError as e:
-        return jsonify(e.messages), 400
-    
-    cart_saved = cartService.add_to_cart(cart_data)
-    return cart_schema.jsonify(cart_data), 201
-     
-
 def remove_from_cart():
     data = request.get_json()
     customer_id = data.get('customer_id')
@@ -31,7 +21,6 @@ def remove_from_cart():
 
     if not customer_id and not product_id:
         return jsonify({'error': 'Customer ID and Product ID are required'}), 400
-
     result = remove_from_cart( product_id)
     return jsonify(result)
 

@@ -19,10 +19,6 @@ customer_schema = CustomerSchema()
 customers_schema = CustomerSchema(many=True, exclude=["password"])
 
 
-# class CustomerOrderSchema(ma.Schema):
-#     name = fields.String(required=True)
-#     email = fields.Email(required=True)
-
 class CustomerOrderSchema(ma.Schema):
     id = fields.Integer(required=False) 
     name = fields.String(required=True)

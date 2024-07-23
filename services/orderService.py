@@ -4,28 +4,52 @@ from sqlalchemy import select
 from datetime import date
 from models.product import Product
 from models.customer import Customer
+from models.cart import Cart
 from models.order_product import order_product
+from services.cartService import empty_cart
+from flask import jsonify, request
 
-def save(order_data):
+
+
+# def save(order_data):
     
-    new_order = Order(order_date=date.today(), customer_id=order_data['customer_id'])
-    cart = ['Potato']
+#     new_order = Order(order_date=date.today(), customer_id=order_data['customer_id'])
+#     cart = []
     
+#     for item_id in cart:
+#         query = select(Product).filter(Product.name == item_id)
+#         item = db.session.execute(query).scalar()
+#         new_order.products.append(item)
+    
+#     db.session.add(new_order)
+#     db.session.commit()
+    
+#     db.session.refresh(new_order)
+#     return new_order
+
+def save_order():
+    # cart_items = db.session.query(Cart).filter(Cart.customer_id == customer_id).all()
+    # if not cart_items:
+    #     return {'error': 'Cart is empty'}, 400
+
+    new_order = Order(order_date=date.today(), customer_id=request.json['customer_id'])
+    customer_id=request.json['customer_id']
+    cart = []
     for item_id in cart:
         query = select(Product).filter(Product.name == item_id)
         item = db.session.execute(query).scalar()
         new_order.products.append(item)
         
-        # for item_id in order_data['product_id']:
-        # query = select(Product).filter(Product.id == item_id)
-        # item = db.session.execute(query).scalar()
-        # new_order.products.append(item)
-    
     db.session.add(new_order)
     db.session.commit()
-    
-    db.session.refresh(new_order)
-    return new_order
+    empty_cart(customer_id)
+    return {'message': 'Order placed successfully'}, 200
+
+
+def checkout():
+    result = save_order()
+    return jsonify(result)
+
 
 
 def find_all():
@@ -54,4 +78,3 @@ def find_all_paginate(page, per_page):
     return orders
 
 
-        
