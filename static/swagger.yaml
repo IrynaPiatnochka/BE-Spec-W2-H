@@ -223,6 +223,7 @@ paths:
           schema:
             $ref: "#/definitions/CreateOrder"
 
+
   /checkout:
     post:
       tags:
@@ -234,6 +235,8 @@ paths:
           name: "body"
           description: "Order details"
           required: true
+      responses:
+        201:
           schema:
             $ref: "#/definitions/Checkout"
 
@@ -250,7 +253,7 @@ paths:
         200:
           description: "List of all orders"
           schema:
-            $ref: "#/definitions/AllOrder"
+            $ref: "#/definitions/AllOrders"
       
 
   /orders/paginate:

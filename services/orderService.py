@@ -44,7 +44,7 @@ def save_order():
 
 def checkout():
     result = save_order()
-    return jsonify(result)
+    return jsonify(result), 200
 
 
 def find_all():
