@@ -223,6 +223,21 @@ paths:
           schema:
             $ref: "#/definitions/CreateOrder"
 
+  /checkout:
+    post:
+      tags:
+        - Orders
+      summary: "Place an order"
+      description: "Place an order and save it in the system"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Order details"
+          required: true
+          schema:
+            $ref: "#/definitions/Checkout"
+
+
  
     get:
       tags:
@@ -537,6 +552,7 @@ definitions:
         description: "Number of products per page"
       products:
         type: "list"
+
      
   ProductSearch:
     type: "object"
@@ -557,6 +573,22 @@ definitions:
     required:
       - customer_id
       - products
+
+
+  Checkout:
+    type: "object"
+    properties:
+      customer_id:
+        type: "integer"
+        description: "The ID of the customer"
+      cart:
+        type: "list"
+        items:
+          type: "string"
+        description: "List of product names"
+    required:
+      - "customer_id"
+      - "cart"
 
 
   AllOrders:
