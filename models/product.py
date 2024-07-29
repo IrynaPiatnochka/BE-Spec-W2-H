@@ -9,6 +9,7 @@ class Product(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(250), nullable=False)
     price: Mapped[float] = mapped_column(db.Float, nullable=False)
+    
     carts: Mapped["Cart"] = db.relationship("Cart", back_populates="product")
 
     

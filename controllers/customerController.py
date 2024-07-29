@@ -29,19 +29,19 @@ def save():
 
 
 # @cache.cached(timeout=60)
-# @admin_required
+@admin_required
 def find_all():
     all_customers = customerService.find_all()
     return customers_schema.jsonify(all_customers), 200
 
-# @admin_required
+@admin_required
 def find_all_paginate():
     page = int(request.args.get("page"))
     per_page = int(request.args.get("per_page"))
     customers = customerService.find_all_paginate(page, per_page)
     return customers_schema.jsonify(customers), 200
     
-# @user_token_required
+@user_token_required
 def update_customer(id):
     try:
         customer_data = request.json
@@ -53,7 +53,7 @@ def update_customer(id):
     except ValidationError as e:
         return jsonify(e.messages), 400
    
-# @user_token_required
+@user_token_required
 def delete_customer(id):
     try:
         success = customerService.delete_customer(id)

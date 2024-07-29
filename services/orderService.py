@@ -10,7 +10,6 @@ from services.cartService import empty_cart
 from flask import jsonify, request
 
 
-
 # def save(order_data):
     
 #     new_order = Order(order_date=date.today(), customer_id=order_data['customer_id'])
@@ -28,9 +27,6 @@ from flask import jsonify, request
 #     return new_order
 
 def save_order():
-    # cart_items = db.session.query(Cart).filter(Cart.customer_id == customer_id).all()
-    # if not cart_items:
-    #     return {'error': 'Cart is empty'}, 400
 
     new_order = Order(order_date=date.today(), customer_id=request.json['customer_id'])
     customer_id=request.json['customer_id']
@@ -51,21 +47,20 @@ def checkout():
     return jsonify(result)
 
 
-
 def find_all():
     query = select(Order)
     all_orders = db.session.execute(query).scalars().all()
     return all_orders
 
-def find_by_id(id):
-    query = select(Order).filter(Order.id==id)
-    orders = db.session.execute(query).scalars().all()
-    return orders
+# def find_by_id(id):
+#     query = select(Order).filter(Order.id==id)
+#     orders = db.session.execute(query).scalars().all()
+#     return orders
 
-def find_by_customer_id(id):
-    query = select(Order).filter(Order.customer_id==id)
-    orders = db.session.execute(query).scalars().all()
-    return orders
+# def find_by_customer_id(id):
+#     query = select(Order).filter(Order.customer_id==id)
+#     orders = db.session.execute(query).scalars().all()
+#     return orders
 
 def find_by_customer_email(email):
     query = select(Order).join(Customer).where(Customer.id==Order.customer_id).filter(Customer.email == email)

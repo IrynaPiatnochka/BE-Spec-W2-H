@@ -1,0 +1,682 @@
+swagger: '2.0'
+info:
+  title: "E-Commerce API"
+  description: "API to manage ecommerce interactions"
+  version: "1.0.0"
+host: "127.0.0.1:5000" 
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+paths: 
+
+  /customers/login:
+    post: 
+      tags: 
+        - Customers 
+      summary: "Login Endpoint (generates token)"
+      description: "Endpoint for user authentication, and token generation"
+      parameters:
+        - in: "body" 
+          name: "body"
+          description: "Credentials for login"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginPayload"
+      responses:
+        200:
+          description: "Login Successful"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+          examples:
+            application/json:
+              auth_token: "iyhgJHLYFGKHBiYFGgb....."
+              message: "Successfully logged in"
+              status: "success"
+  
+  /customers:
+    get: 
+      tags:
+        - Customers
+      summary: "Returns all Customers"
+      descriptions: "Returns all customers' information (requires token)"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Retrieved Customers Successfully"
+          schema:
+            $ref: "#/definitions/AllCustomers"
+
+ 
+    post:
+      tags:
+        - Customers
+      summary: "Creates a new customer"
+      description: "Creates a new customer entry in the system"
+      parameters:
+        - in: "body"
+          name: "body"
+      responses:
+        201:
+          description: "Customer Created Successfully"
+          schema:
+            $ref: "#/definitions/Customer"
+    
+
+  /customers/paginate:
+    get:
+      tags:
+        - Customers
+      summary: "Retrieves a paginated list of customers"
+      description: "Returns a list of customers with pagination support. Requires admin authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: "Page number for pagination"
+        - name: per_page
+          in: query
+          description: "Number of customers per page"
+      responses:
+        200:
+          description: "Successfully retrieved paginated list of customers"
+          schema:
+            $ref: "#/definitions/AllCustomersPaginate"
+
+
+  /update_customer/{id}:
+    put:
+      tags:
+        - Customers
+      summary: "Updates a customer"
+      description: "Updates the details of a specific customer by ID. Requires user authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the customer to be updated"
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Successfully updated customer"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/CustomerUpdate"
+
+        
+  /delete_customer/{id}:
+    delete:
+      tags:
+        - Customers
+      summary: "Deletes a customer"
+      description: "Deletes a specific customer by ID. Requires user authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the customer to be deleted"
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Successfully deleted customer"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/DeleteCustomer"
+
+
+#################################################################################################
+
+  /products:
+    get: 
+      tags:
+        - Products
+      summary: "Returns all Products"
+      descriptions: "Returns all Products' information (requires token)"
+      responses:
+        200:
+          description: "Retrieved Products Successfully"
+          schema:
+            $ref: "#/definitions/AllProducts"
+
+
+    post:
+      tags:
+        - Products
+      summary: "Creates a new product"
+      description: "Creates a new product entry in the system. Requires admin authentication."
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: "Product data to be saved"
+        required: true
+      responses:
+        201:
+          description: "Product created successfully"
+          schema:
+            $ref: "#/definitions/SaveProduct"
+     
+
+  products/paginate:
+    get:
+      tags:
+        - Products
+      summary: "Retrieves paginated list of products"
+      description: "Retrieves a paginated list of products. Requires user authentication."
+      security:
+        - bearerAuth: []      
+      responses:
+        200:
+          description: "List of products for the specified page"
+          schema:
+            $ref: "#/definitions/AllProductsPaginate"
+          
+
+  products/search:
+    get:
+      tags:
+        - Products
+      summary: "Finds a product"
+      description: "Searches for products based on a search term. Requires user authentication."
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "List of products matching the search term"
+          schema:
+            $ref: "#/definitions/ProductSearch"
+
+
+#################################################################################################
+
+
+  /orders:
+    post:
+      tags:
+        - Orders
+      summary: "Creates a new order"
+      description: "Creates a new order entry in the system. Requires user authentication."
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: "Product data to be saved"
+        required: true
+      responses:
+        201:
+          description: "Order created successfully"
+          schema:
+            $ref: "#/definitions/CreateOrder"
+
+ 
+    get:
+      tags:
+        - Orders
+      summary: "Retrieves all orders"
+      description: "Retrieves a list of all orders. Requires admin authentication."
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "List of all orders"
+          schema:
+            $ref: "#/definitions/AllOrder"
+      
+
+  /orders/paginate:
+    get:
+      tags:
+        - Orders
+      summary: "Retrieves paginated list of orders"
+      description: "Retrieves a paginated list of orders. Requires admin authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: "The page number to retrieve"
+          required: true
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          description: "Number of orders per page"
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "List of orders for the specified page"
+          schemas:
+            $ref: "#/definitions/AllOrdersPaginate"
+                
+       
+  /orders/find_by_customer_email:
+    post:
+      tags:
+        - Orders
+      summary: "Retrieves orders by customer email"
+      description: "Retrieves a list of orders associated with a specific customer email. Requires user authentication."
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: "Email address of the customer to retrieve orders for"
+      responses:
+        200:
+          description: "List of orders for the specified customer email"
+          schema:
+            $ref: "#/definitions/FindByCustomerEmail"
+  
+
+#################################################################################################
+
+
+  /cart/{customer_id}:
+    get:
+      tags:
+        - Cart
+      summary: "Retrieves items in a customer's cart"
+      description: "Retrieves a list of items currently in the cart for a specific customer. Requires user authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: customer_id
+          in: path
+          description: "ID of the customer whose cart is to be retrieved"
+          required: true
+      responses:
+        200:
+          description: "List of items in the cart for the specified customer"
+          schema: 
+            $ref: "#/definitions/Cart"
+      
+
+
+  /cart/remove_item/{customer_id}/{product_id}:
+    delete:
+      tags:
+        - Cart
+      summary: "Removes a product from a customer's cart"
+      description: "Removes a specific product from a customer's cart based on provided customer ID and product ID. Requires user authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: customer_id
+          in: path
+          description: "ID of the customer whose cart is to be updated"
+          required: true
+        - name: product_id
+          in: path
+          description: "ID of the product to remove from the cart"
+          required: true
+      responses:
+        200:
+          description: "Product successfully removed from the cart"
+          schema:
+            $ref: "#/definitions/RemoveFromCart"
+          
+     
+
+  /cart/add_to_cart:
+    post:
+      tags:
+        - Cart
+      summary: "Adds a product to a customer's cart"
+      description: "Adds a specified product to a customer's cart. Requires user authentication."
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: "Request body containing customer ID, product ID, and quantity to add to the cart."
+        required: true
+      responses:
+        200:
+          description: "Product successfully added to the cart"
+          schema:
+            $ref: "#/definitions/AddToCart"
+
+     
+
+  /cart/delete/{id}:
+    delete:
+      tags:
+        - Cart
+      summary: "Empties a customer's cart"
+      description: "Removes all items from a specific customer's cart based on their customer ID. Requires user authentication."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the customer whose cart is to be emptied"
+          required: true
+      responses:
+        200:
+          description: "Cart successfully emptied"
+          schema:
+            $ref: "#/definitions/EmptyCart"
+          
+      
+
+
+definitions:
+
+  LoginPayload:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "Customer username"
+      password:
+        type: "string"
+        description: "Customer password"
+    required:
+      - "username"
+      - "password"
+
+  LoginResponse:
+    type: "object"
+    properties:
+      auth_token:
+        type: "string"
+        description: "Authorization Token"
+      message:
+        type: "string"
+        description: "Successfully Logged In"
+      status: 
+        type: "string"
+        description: "Success"
+
+  AllCustomers:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Customer Name"
+      email:
+        type: "string"
+        description: "Customer Email"
+      phone:
+        type: "string"
+        description: "Customer Phone"
+      username:
+        type: "string"
+        description: "Customer Username"
+      role_id:
+        type: "integer"
+        description: "Customer"
+        
+
+  Customer:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Customer Name"
+      email:
+        type: "string"
+        description: "Customer Email"
+      phone:
+        type: "string"
+        description: "Customer Phone"
+      username:
+        type: "string"
+        description: "Customer Username"
+      password:
+        type: "string"
+        description: "Customer Password"
+      role_id:
+        type: "integer"
+        description: "Customer Role ID"
+
+  AllCustomersPaginate:
+    type: "object"
+    properties:
+      total:
+        type: "integer"
+        description: "Total number of customers available"
+      page:
+        type: "integer"
+        description: "Current page number"
+      per_page:
+        type: "integer"
+        description: "Number of customers per page"
+      customers:
+        type: "string"
+        items:
+          $ref: "#/definitions/Customer"
+    
+
+  CustomerUpdate:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the customer"
+      email:
+        type: "string"
+        description: "Email address of the customer"
+      phone:
+        type: "string"
+        description: "Phone number of the customer"
+
+
+  DeleteCustomer:
+    type: object
+    properties:
+      message:
+        type: "string"
+        description: "Confirmation message that the customer was deleted"
+        example: "Customer deleted successfully"
+    required:
+      - message
+  
+
+  AllProducts:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Product Name"
+      price:
+        type: "float"
+        desription: "Product Price"
+
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Unique identifier for the product"
+      name:
+        type: "string"
+        description: "Name of the product"
+      price:
+        type: "float"
+        description: "Price of the product"
+
+  SaveProduct:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Unique identifier for the product"
+      name:
+        type: "string"
+        description: "Name of the product"
+      price:
+        type: "float" 
+        description: "Price of the product"
+    required:
+      - name
+      - price
+
+
+  AllProductsPaginate:
+    type: "object"
+    properties:
+      page:
+        type: "integer"
+        description: "The current page number"
+      per_page:
+        type: "integer"
+        description: "Number of products per page"
+      products:
+        type: "list"
+     
+  ProductSearch:
+    type: "object"
+    properties:
+      products:
+        type: "string"
+
+
+  CreateOrder:
+    type: "object"
+    properties:
+      customer_id:
+        type: "integer"
+        description: "ID of the customer placing the order"
+      products:
+        type: "list"
+        description: "List of product IDs included in the order"
+    required:
+      - customer_id
+      - products
+
+
+  AllOrders:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Unique identifier for the order"
+      order_date:
+        type: "string"
+        format: "date"
+        description: "Date when the order was placed"
+      customer_id:
+        type: "integer"
+        description: "ID of the customer who placed the order"
+      products:
+        type: "list"
+        description: "List of products included in the order"
+
+  
+  AllOrdersPaginate:
+    type: "object"
+    properties:
+      page:
+        type: "integer"
+        description: "The current page number"
+      per_page:
+        type: "integer"
+        description: "Number of orders per page"
+      total:
+        type: "integer"
+        description: "Total number of orders available"
+      total_pages:
+        type: "integer"
+        description: "Total number of pages available"
+      orders:
+        type: "string"
+        
+  
+  FindByCustomerEmail:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Unique identifier for the order"
+      order_date:
+        type: "string"
+        format: "date"
+        description: "Date when the order was placed"
+      customer_id:
+        type: "integer"
+        description: "ID of the customer who placed the order"
+      products:
+        type: "list"
+        description: "List of products included in the order"
+
+
+  Cart:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Unique identifier for the cart item"
+      customer_id:
+        type: "integer"
+        description: "ID of the customer associated with the cart item"
+      product_id:
+        type: "integer"
+        description: "ID of the product in the cart"
+      quantity:
+        type: "integer"
+        description: "Quantity of the product in the cart"
+
+
+  RemoveFromCart:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Unique identifier for the cart item"
+      customer_id:
+        type: "integer"
+        description: "ID of the customer associated with the cart item"
+      product_id:
+        type: "integer"
+        description: "ID of the product in the cart"
+      quantity:
+        type: "integer"
+        description: "Quantity of the product in the cart"
+
+
+  AddToCart:
+    type: "object"
+    properties:
+      customer_id:
+        type: "integer"
+        description: "ID of the customer adding the product to the cart"
+      product_id:
+        type: "integer"
+        description: "ID of the product being added to the cart"
+      quantity:
+        type: "integer"
+        description: "Quantity of the product to add to the cart"
+    required:
+      - customer_id
+      - product_id
+      - quantity
+
+
+  EmptyCart:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "Confirmation message about the cart being emptied"
+
+  
+
+
+
+
+  
+ 

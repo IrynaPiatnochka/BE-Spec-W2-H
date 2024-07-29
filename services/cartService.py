@@ -4,7 +4,7 @@ from models.product import Product
 from models.customer import Customer
 from sqlalchemy import delete
 from flask import request
-from models.schemas.cartSchema import cart_schema
+from models.schemas.cartSchema import carts_schema
 from models.schemas.productSchema import products_schema
 
 from models.schemas import cartSchema, productSchema
@@ -19,14 +19,7 @@ from models.schemas import cartSchema, productSchema
     
 def view_cart(customer_id):
     cart_items = db.session.query(Cart, Product).join(Product, Cart.product_id == Product.id).filter(Cart.customer_id == customer_id).all()
-    # print(cart_items)
-    # # cart = Cart.query.filter(Cart.id = customer_id).one()
-    # cart_result = cart_schema.dump(cart_items)
-    # product_result = products_schema.dump(cart_items)
-    # print(cart_result)
-    # print(product_result)
-    
-    
+  
     result = []
     for cart, product in cart_items:
         item = {
@@ -34,8 +27,10 @@ def view_cart(customer_id):
             "customer_id": cart.customer_id,
             "product_id": cart.product_id,
             "quantity": cart.quantity,
-            "product_name": product.name,
-            "product_price": product.price
+            "product": {
+                "name": product.name,
+                "price": product.price
+            }
         }
         result.append(item)
         

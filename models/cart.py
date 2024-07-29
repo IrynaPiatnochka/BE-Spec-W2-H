@@ -8,7 +8,6 @@ class Cart(Base):
     product_id: Mapped[int] = mapped_column(db.ForeignKey('products.id'), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False, default=1)
     product: Mapped["Product"] = db.relationship("Product", back_populates="carts")
-  
-    # products: Mapped["Product"] = db.relationship("Product", back_populates="product")
+
     
     

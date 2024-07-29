@@ -1,19 +1,21 @@
 from flask import request, jsonify
-from models.schemas.cartSchema import cart_schema
+from models.schemas.cartSchema import carts_schema
 from services import cartService
+from services.cartService import view_cart
 from models.product import Product
 from models.cart import Cart
 from marshmallow import ValidationError
 from caching import cache
 from database import db
+from utils.util import user_token_required
 
-
+@user_token_required
 def view_cart(customer_id):
     cart = cartService.view_cart(customer_id)
     print(cart)
-    return cart_schema.jsonify(cart)
+    return carts_schema.jsonify(cart)
 
-
+@user_token_required
 def remove_from_cart():
     data = request.get_json()
     customer_id = data.get('customer_id')

@@ -9,7 +9,7 @@ def login(username, password):
     customer = db.session.execute(query).scalar_one_or_none() 
 
     if customer and customer.password == password: 
-        auth_token = encode_token(customer.id, customer.role_id.role_name)
+        auth_token = encode_token(customer.id, customer.role_id)
 
         response = {
             "status": "success",
